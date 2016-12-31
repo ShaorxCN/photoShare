@@ -1,10 +1,18 @@
 package routers
 
 import (
-	"photoShare/controllers"
+	"photoShare/controllers/user"
+
 	"github.com/astaxie/beego"
 )
 
 func init() {
-    beego.Router("/", &controllers.MainController{})
+	beego.Router("/", &user.MainController{})
+
+	//登录模块
+	beego.Router("/login", &user.LoginInController{})
+
+	//用户模块
+	beego.Router("/user/:id", &user.UserController{})
+
 }
