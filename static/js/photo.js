@@ -6,26 +6,74 @@ $(function(){
             username:{ required: true},
             password:{required: true}
         },
-        messages : {
-            username : {required: '请填写用户名'},
-            password : {required: '请填写密码'}
-        },
+        
         submitHandler:function(form) {
             var url = '/login';
-            var param = $("#login-form").serialize();
+            //var param = $("#login-form").serialize();
+            var pwd = hex_md5(document.getElementById("password").value);
+            var username = document.getElementById("username").value;
+            var param = {"username":username,"password":pwd};
+
+            
             $.ajax({
                 url:url,
                 type:'POST',
                 dataType:'json',
                 data:param,
+                timeout:1000,
                 success:function(data) {
                     dialogInfo(data.message)
                     var redirect = data.redirect
                     if (data.code) {
-                       setTimeout(function(){window.location.replace(redirect)}, 2000);
+                      setTimeout(function(){window.location.replace(redirect)}, 2000);
                     } else {
                        setTimeout(function(){ $('#dialogInfo').modal('hide'); }, 1000);
                     }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                     dialogInfo("服务器正忙，请稍后尝试")
+                    setTimeout(function() {
+                         $('#dialogInfo').modal('hide'); 
+                    }, 1000);
+                }
+            });
+        }
+    });
+
+
+    $('#register-form').validate({
+        ignore:'',
+        rules: {
+            username:{required:true,maxlength:15},
+            password:{required:true,maxlength:40,minlength:8},
+            confirmpwd:{required:true,maxlength:40,minlength:8,equalTo:"#password"}
+        },
+        
+        submitHandler:function(form){
+            var url = '/register';
+            var pwd = hex_md5(document.getElementById("password").value);
+            var username = document.getElementById("username").value;
+            var param = {"username":username,"password":pwd};
+            $.ajax({
+                url:url,
+                type:'POST',
+                dataType:'json',
+                data:param,
+                timeout:1000,
+                success:function(data) {
+                    dialogInfo(data.message)
+                    var redirect = data.redirect
+                    if (data.code) {
+                      setTimeout(function(){window.location.replace(redirect)}, 2000);
+                    } else {
+                       setTimeout(function(){ $('#dialogInfo').modal('hide'); }, 1000);
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                     dialogInfo("服务器正忙，请稍后尝试")
+                    setTimeout(function() {
+                         $('#dialogInfo').modal('hide'); 
+                    }, 1000);
                 }
             });
         }
