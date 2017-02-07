@@ -1,10 +1,17 @@
 package models
 
 import (
-	"log"
-
+	"errors"
 	"github.com/astaxie/beego/orm"
+	"log"
+	"strconv"
+	"sync"
+	"time"
 )
+
+var seq = 0
+var once sync.Once
+var idChannel chan int
 
 type User struct {
 	Id       int64        `orm:"pk;column(userid);"`
@@ -66,4 +73,52 @@ func LoginUser(username, password string) (User, error) {
 	**/
 	return user, err
 
+}
+
+func singleIdChanel() chan int {
+	if idChannel == nil {
+		once.Do(func() { idChannel = make(chan int, 100) })
+		go userIdPro(idChannel)
+	}
+
+	return idChannel
+}
+
+func userIdPro(idChannel chan int) {
+	for {
+		if seq == 9999 {
+			seq = 1
+		} else {
+			seq++
+		}
+
+		idChannel <- seq
+	}
+}
+
+//get userId
+func getUserId() (int64, error) {
+	idChannel := singleIdChanel()
+
+	var pre = time.Now().Format("20060102150405")
+	seqt := <-idChannel
+
+	res, err := strconv.ParseInt(pre+strconv.Itoa(seqt), 10, 64)
+
+	if err != nil {
+		return 0, errors.New("获取用户id失败")
+	}
+
+	return res, nil
+}
+
+func RegisterUser(username, password string) error {
+	id, err := getUserId()
+	if err != nil {
+		return err
+	} else {
+		log.Println(id)
+
+	}
+	return nil
 }

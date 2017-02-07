@@ -4,6 +4,7 @@ import (
 	"github.com/astaxie/beego"
 	//"net/http"
 	//"log"
+	"strconv"
 	"strings"
 )
 
@@ -17,13 +18,16 @@ type BaseController struct {
 
 func (b *BaseController) Prepare() {
 	isLogin := b.GetSession("isLogin")
+
 	if isLogin == nil {
 		b.IsLogin = false
 	} else {
 		temp := strings.Split(b.GetSession("isLogin").(string), "||")
-		if 3 == len(temp) {
+		if 2 == len(temp) {
 			b.IsLogin = true
-			//todo more about session
+			b.UserUserId, _ = strconv.ParseInt(temp[0], 10, 64)
+			b.UserUserName = temp[1]
 		}
 	}
+
 }

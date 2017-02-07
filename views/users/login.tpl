@@ -27,8 +27,7 @@
       <input class="form-control" type="password" id="password" name="password" placeholder="请填写密码,默认:123456">
     </div>    
       <button class="btn btn-default col-md-offset-2" type="submit" >登录</button>
-
-      <button class="btn btn-default col-md-offset-2" >注册</button>
+      <a class="btn btn-default" href="/register" style="margin-left:20%">注册</a>
   </form>
   </div>
 </div>
