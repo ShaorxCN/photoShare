@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"log"
 	"strconv"
@@ -112,13 +113,29 @@ func getUserId() (int64, error) {
 	return res, nil
 }
 
-func RegisterUser(username, password string) error {
+func RegisterUser(username, password string) (*User, error) {
+	user := new(User)
 	id, err := getUserId()
 	if err != nil {
-		return err
+		return user, err
+	}
+
+	o := orm.NewOrm()
+	exist := o.QueryTable(TableName("user")).Filter("username", username).Exist()
+	if exist {
+		return user, errors.New(fmt.Sprintf("用户 %s 已存在,请更换用户名.", username))
 	} else {
-		log.Println(id)
+		user.Username = username
+		user.Password = password
+		user.Status = 1
+		user.Id = id
+		user.Profile = new(UserProfile)
+		_, err := o.Insert(user)
+		if err != nil {
+			return user, errors.New("注册失败")
+		}
 
 	}
-	return nil
+
+	return user, nil
 }
