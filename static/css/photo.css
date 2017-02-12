@@ -1,0 +1,6 @@
+.form-group label.error{
+     display: inline;
+    margin: 5px 0;
+    color: red;
+    font-weight: 400;
+}
