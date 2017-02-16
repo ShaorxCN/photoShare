@@ -5,7 +5,6 @@
 <style>
 </style>
 {{template "prepare/head.tpl"}}
- <script src="static/js/b.js" type="text/javascript"></script>
 </head>
 <body style="background:yellow">
 
@@ -20,7 +19,7 @@
     
     <div class="form-group">
       <label for="username">username</label> 
-      <input type="text" class="form-control" id="username" name="username"  placeholder="请填写用户名，默认:shao">
+      <input type="text" class="form-control" id="username" name="username"  placeholder="请填写用户名，默认:shao" autofocus>
     </div>
     <div class="form-group">
       <label for="password">password</label>

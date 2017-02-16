@@ -16,7 +16,7 @@
         <form   id="register-form" role="form">
           <div class="form-group">
             <label for="username">用户名</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="用户名">
+            <input type="text" id="username" name="username" class="form-control" placeholder="用户名" autofocus>
           </div>
           <div class="form-group">
             <label for="password">密码</label>

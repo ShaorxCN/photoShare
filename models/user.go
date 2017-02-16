@@ -46,7 +46,7 @@ func (u *User) TableName() string {
 }
 
 func (p *UserProfile) TableName() string {
-	return TableName("UserProfile")
+	return TableName("user_profile")
 }
 
 func LoginUser(username, password string) (User, error) {
@@ -74,6 +74,15 @@ func LoginUser(username, password string) (User, error) {
 	**/
 	return user, err
 
+}
+
+func checkErr(err error, message string) error {
+	if err != nil {
+		log.Println(err)
+		return errors.New("message")
+	} else {
+		return nil
+	}
 }
 
 func singleIdChanel() chan int {
@@ -113,6 +122,12 @@ func getUserId() (int64, error) {
 	return res, nil
 }
 
+//get ProfileId
+func GetProfileId(id int64) (int64, error) {
+	profileId, err := strconv.ParseInt("1"+strconv.FormatInt(id, 10), 10, 64)
+	return profileId, err
+}
+
 func RegisterUser(username, password string) (*User, error) {
 	user := new(User)
 	id, err := getUserId()
@@ -125,17 +140,45 @@ func RegisterUser(username, password string) (*User, error) {
 	if exist {
 		return user, errors.New(fmt.Sprintf("用户 %s 已存在,请更换用户名.", username))
 	} else {
+
 		user.Username = username
 		user.Password = password
 		user.Status = 1
 		user.Id = id
-		user.Profile = new(UserProfile)
-		_, err := o.Insert(user)
+
+		profileId, err := GetProfileId(id)
 		if err != nil {
+			log.Println("获取profileId失败")
+			return user, errors.New("注册失败")
+		}
+		profile := new(UserProfile)
+		profile.Id = profileId
+		user.Profile = profile
+		err = o.Begin()
+		if err != nil {
+			log.Println(err)
+			return user, errors.New("注册失败")
+		}
+		_, err = o.Insert(user)
+		if err != nil {
+			log.Println(err)
+			err = o.Rollback()
+			log.Println(err)
+			return user, errors.New("注册失败")
+		}
+		_, err = o.Insert(profile)
+		if err != nil {
+			log.Println(err)
+			err = o.Rollback()
+			log.Println(err)
 			return user, errors.New("注册失败")
 		}
 
 	}
-
+	err = o.Commit()
+	if err != nil {
+		log.Println(err)
+		return user, errors.New("注册失败")
+	}
 	return user, nil
 }

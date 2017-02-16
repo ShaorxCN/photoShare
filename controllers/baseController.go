@@ -18,7 +18,6 @@ type BaseController struct {
 
 func (b *BaseController) Prepare() {
 	isLogin := b.GetSession("isLogin")
-
 	if isLogin == nil {
 		b.IsLogin = false
 	} else {

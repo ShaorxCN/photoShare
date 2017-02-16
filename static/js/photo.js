@@ -24,7 +24,7 @@ $(function(){
                 success:function(data) {
                     dialogInfo(data.message)
                     var redirect = data.redirect
-                    if (data.code) {
+                    if (data.code){
                       setTimeout(function(){window.location.replace(redirect)}, 2000);
                     } else {
                        setTimeout(function(){ $('#dialogInfo').modal('hide'); }, 1000);
@@ -78,6 +78,18 @@ $(function(){
             });
         }
     });
+});
+
+
+//引用日期控件
+$('.form-date').datepicker({
+    language:'zh-CN',
+    weekStart:1,
+    todayHighlight:true,
+    todayBtn:"linked",
+    format:"yyyy-mm-dd",
+    minView:"month",
+    autoclose:true
 });
 
 function dialogInfo(msg) {

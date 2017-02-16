@@ -19,7 +19,7 @@ func (this *MainController) Get() {
 	if check {
 		this.Redirect(fmt.Sprintf("/user/%s", strconv.FormatInt(this.UserUserId, 10)), 301)
 	} else {
-		this.Redirect("/login", 301)
+		this.Redirect("/login", 302)
 	}
 
 }
@@ -56,9 +56,9 @@ type UserController struct {
 
 func (this *UserController) Get() {
 	check := this.BaseController.IsLogin
-
+	log.Println(check)
 	if !check {
-		this.Redirect("/login", 301)
+		this.Redirect("/login", 302)
 
 	} else {
 		this.TplName = "users/user.tpl"
