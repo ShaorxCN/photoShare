@@ -123,10 +123,10 @@ func getUserId() (int64, error) {
 }
 
 //get ProfileId
-func GetProfileId(id int64) (int64, error) {
-	profileId, err := strconv.ParseInt("1"+strconv.FormatInt(id, 10), 10, 64)
-	return profileId, err
-}
+// func GetProfileId(id int64) (int64, error) {
+// 	profileId, err := strconv.ParseInt("1"+strconv.FormatInt(id, 10), 10, 64)
+// 	return profileId, err
+// }
 
 func RegisterUser(username, password string) (*User, error) {
 	user := new(User)
@@ -146,13 +146,8 @@ func RegisterUser(username, password string) (*User, error) {
 		user.Status = 1
 		user.Id = id
 
-		profileId, err := GetProfileId(id)
-		if err != nil {
-			log.Println("获取profileId失败")
-			return user, errors.New("注册失败")
-		}
 		profile := new(UserProfile)
-		profile.Id = profileId
+		profile.Id = id
 		user.Profile = profile
 		err = o.Begin()
 		if err != nil {

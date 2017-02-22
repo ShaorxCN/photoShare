@@ -1,8 +1,9 @@
 package user
 
 import (
-	//"github.com/astaxie/beego"
 	"fmt"
+	//"github.com/astaxie/beego"
+	//"html/template"
 	"log"
 	"photoShare/controllers"
 	"photoShare/models"
@@ -15,7 +16,7 @@ type MainController struct {
 
 func (this *MainController) Get() {
 	check := this.BaseController.IsLogin
-
+	this.Data["xsrf_token"] = this.XSRFToken()
 	if check {
 		this.Redirect(fmt.Sprintf("/user/%s", strconv.FormatInt(this.UserUserId, 10)), 301)
 	} else {
@@ -29,11 +30,13 @@ type LoginInController struct {
 }
 
 func (this *LoginInController) Get() {
+	this.Data["xsrf_token"] = this.XSRFToken()
 	this.TplName = "users/login.tpl"
 
 }
 
 func (this *LoginInController) Post() {
+
 	username := this.GetString("username")
 	password := this.GetString("password")
 
@@ -55,9 +58,9 @@ type UserController struct {
 }
 
 func (this *UserController) Get() {
+	this.Data["xsrf_token"] = this.XSRFToken()
 	check := this.BaseController.IsLogin
-	log.Println(check)
-	if !check {
+	if (!check) || this.Ctx.Input.Param(":id") != strconv.FormatInt(this.BaseController.UserUserId, 10) {
 		this.Redirect("/login", 302)
 
 	} else {

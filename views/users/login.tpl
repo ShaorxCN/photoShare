@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="_xsrf" content="{{.xsrf_token}}" />
 <style>
 </style>
 {{template "prepare/head.tpl"}}
@@ -16,7 +17,7 @@
   </div>
   <div class="row col-md-6 col-md-offset-3" >
   <form  id="login-form" role="form" style="width:50%;height:50%;margin:5% auto;">
-    
+    {{.xsrfdata}}
     <div class="form-group">
       <label for="username">username</label> 
       <input type="text" class="form-control" id="username" name="username"  placeholder="请填写用户名，默认:shao" autofocus>

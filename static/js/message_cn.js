@@ -16,4 +16,11 @@ jQuery.extend(jQuery.validator.messages,{
   range: jQuery.validator.format("请输入一个介于 {0} 和 {1} 之间的值"),
   max: jQuery.validator.format("请输入一个最大为{0} 的值"),
   min: jQuery.validator.format("请输入一个最小为{0} 的值")
-})
+});
+
+//自定义手机校验
+jQuery.validator.addMethod("isMobile",function(value,element){
+  var length = value.length;
+  var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})|(14[0-9]{9})$/;
+  return this.optional(element) || (length==11 &&mobile.test(value));
+},"请输入正确的手机号,如有疑问请联系管理员");

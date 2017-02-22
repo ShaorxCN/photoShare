@@ -1,11 +1,40 @@
 $(function(){
     
+    var ajax = $.ajax;
+    $.extend({
+        ajax: function(url, options) {
+            if (typeof url === 'object') {
+                options = url;
+                url = undefined;
+            }
+            options = options || {};
+            url = options.url;
+            var xsrftoken = $('meta[name=_xsrf]').attr('content');
+            var headers = options.headers || {};
+            var domain = document.domain.replace(/\./ig, '\\.');
+            if (!/^(http:|https:).*/.test(url) || eval('/^(http:|https:)\\/\\/(.+\\.)*' + domain + '.*/').test(url)) {
+                headers = $.extend(headers, {'X-Xsrftoken':xsrftoken});
+            }
+            options.headers = headers;
+            return ajax(url, options);
+        }
+    });
+
+    
     $('#login-form').validate({
         ignore:'',
         rules : {
             username:{ required: true},
             password:{required: true}
         },
+        highlight : function(element) { 
+                $(element).closest('.form-group').addClass('has-error'); 
+            }, 
+ 
+            success : function(label) { 
+                label.closest('.form-group').removeClass('has-error'); 
+                label.remove(); 
+            },  
         
         submitHandler:function(form) {
             var url = '/login';
@@ -48,6 +77,14 @@ $(function(){
             password:{required:true,maxlength:40,minlength:8},
             confirmpwd:{required:true,maxlength:40,minlength:8,equalTo:"#password"}
         },
+        highlight : function(element) { 
+                $(element).closest('.form-group').addClass('has-error'); 
+            }, 
+ 
+            success : function(label) { 
+                label.closest('.form-group').removeClass('has-error'); 
+                label.remove(); 
+            },  
         
         submitHandler:function(form){
             var url = '/register';
@@ -78,8 +115,61 @@ $(function(){
             });
         }
     });
+
+
+    //客户信息
+    $('#profile-form').validate({
+        ignore:'',
+        rules: {
+            userId:{required:true},
+            realname:{required:true,maxlength:15},
+            sex:{required:true},
+            birth:{required:true},
+            email:{required:true,email:true},
+            phone:{required:true,isMobile:true}
+        },
+        highlight : function(element) { 
+                $(element).closest('.form-group').addClass('has-error'); 
+            }, 
+ 
+            success : function(label) { 
+                label.closest('.form-group').removeClass('has-error'); 
+                label.remove(); 
+            },  
+        
+        submitHandler:function(form){
+            var userId = document.getElementById("userId").value;
+            var url = '/profile/'+userId;
+            var url2 = '/user/'+userId;
+            var param = $("#profile-form").serialize();
+            $.ajax({
+                url:url,
+                type:'POST',
+                dataType:'json',
+                data:param,
+                timeout:3000,
+                success:function(data) {
+                    
+                    dialogInfo(data.message);
+                    if (data.code) {
+                      setTimeout(function(){window.location.replace(url2)}, 2000);
+                    } else {
+                       setTimeout(function(){ $('#dialogInfo').modal('hide'); }, 1000);
+                    }
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                     dialogInfo("服务器正忙，请稍后尝试")
+                    setTimeout(function() {
+                         $('#dialogInfo').modal('hide'); 
+                    }, 1000);
+                }
+            });
+        }
+    });
+
 });
 
+    
 
 //引用日期控件
 $('.form-date').datepicker({

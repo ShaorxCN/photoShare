@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="_xsrf" content="{{.xsrf_token}}" />
 <style>
 </style>
 {{template "prepare/head.tpl"}}
@@ -14,6 +15,7 @@
       <div class="panel-heading">注册</div>
       <div class="panel-body">
         <form   id="register-form" role="form">
+        {{.xsrfdata}}
           <div class="form-group">
             <label for="username">用户名</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="用户名" autofocus>

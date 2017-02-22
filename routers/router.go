@@ -18,5 +18,6 @@ func init() {
 
 	//账户管理模块
 	beego.Router("/register", &account.RegisterController{})
-	beego.Router("/profile", &account.ProfileController{})
+	beego.Router("/profile/:id([0-9]+)", &account.ProfileController{})
+
 }
