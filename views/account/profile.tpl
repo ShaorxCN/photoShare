@@ -22,12 +22,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="sex">性别<font color="red">*</font></label><br>
-                     
+                    <label for="sex">性别<font color="red">*</font></label><br><div>
                     <input type="radio" name="sex" id="sex" value="1">男</label>
-
-                    
-                    <input type="radio" name="sex" id="sex2" value="0">女</label>
+                    <input type="radio" name="sex" id="sex2" value="0">女</label></div>
                 </div>
 
                 <div class="form-group input-append date">

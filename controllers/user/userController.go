@@ -4,6 +4,7 @@ import (
 	"fmt"
 	//"github.com/astaxie/beego"
 	//"html/template"
+	"github.com/astaxie/beego/orm"
 	"log"
 	"photoShare/controllers"
 	"photoShare/models"
@@ -64,6 +65,14 @@ func (this *UserController) Get() {
 		this.Redirect("/login", 302)
 
 	} else {
+		user := new(models.User)
+		user.Id = this.BaseController.UserUserId
+		o := orm.NewOrm()
+		err := o.Read(user)
+		if err != nil {
+			this.TplName = "error/error.tpl"
+		}
+		this.Data["user"] = user
 		this.TplName = "users/user.tpl"
 	}
 }

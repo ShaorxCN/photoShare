@@ -128,6 +128,13 @@ $(function(){
             email:{required:true,email:true},
             phone:{required:true,isMobile:true}
         },
+
+        errorPlacement:function(error,element){
+            $( element )
+        .closest( "form" )
+          .find( "label[for='" + element.attr( "id" ) + "']" )
+            .append( error );
+  },
         highlight : function(element) { 
                 $(element).closest('.form-group').addClass('has-error'); 
             }, 
@@ -136,7 +143,7 @@ $(function(){
                 label.closest('.form-group').removeClass('has-error'); 
                 label.remove(); 
             },  
-        
+
         submitHandler:function(form){
             var userId = document.getElementById("userId").value;
             var url = '/profile/'+userId;
@@ -167,6 +174,8 @@ $(function(){
         }
     });
 
+
+//todo
 });
 
     

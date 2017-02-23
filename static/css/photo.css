@@ -4,3 +4,13 @@
     color: red;
     font-weight: 400;
 }
+
+.form-login{
+    background: #fff;
+    width:40%;
+    height:350px;
+    display: block;
+    margin: 100px auto;
+    border-radius: 5px;
+    
+}

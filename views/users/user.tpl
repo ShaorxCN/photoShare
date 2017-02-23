@@ -1,5 +1,5 @@
 <html>
     <body>
-        welcome shao
+        welcome {{.user.Username}}
     </body>
 </html>

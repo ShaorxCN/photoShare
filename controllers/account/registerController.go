@@ -76,7 +76,6 @@ func (this *ProfileController) Post() {
 	address := this.GetString("address")
 
 	userId := this.Ctx.Input.Param(":id")
-	log.Println(sex, realname, email, birth, address, userId)
 	//userProfile := new(models.UserProfile)
 	userProfile := new(models.UserProfile)
 	id, err := strconv.ParseInt(userId, 10, 64)
@@ -99,7 +98,8 @@ func (this *ProfileController) Post() {
 			userProfile.Email = email
 			userProfile.Phone = phone
 			userProfile.Realname = realname
-
+			sexInt, err := strconv.Atoi(sex)
+			userProfile.Sex = sexInt
 			_, err = o.Update(userProfile)
 
 			if err != nil {
