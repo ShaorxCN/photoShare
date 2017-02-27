@@ -32,7 +32,7 @@ type LoginInController struct {
 
 func (this *LoginInController) Get() {
 	this.Data["xsrf_token"] = this.XSRFToken()
-	this.TplName = "users/login.tpl"
+	this.TplName = "users/login.html"
 
 }
 

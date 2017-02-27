@@ -16,12 +16,11 @@ type RegisterController struct {
 
 func (this *RegisterController) Get() {
 	this.Data["xsrf_token"] = this.XSRFToken()
-	this.TplName = "account/register.tpl"
+	this.TplName = "account/register.html"
 }
 
 func (this *RegisterController) Post() {
 	//todo
-	this.Data["xsrf_token"] = this.XSRFToken()
 	username := this.GetString("username")
 	password := this.GetString("password")
 	_, err := models.RegisterUser(username, password)
@@ -63,7 +62,7 @@ func (this *ProfileController) Get() {
 }
 
 func (this *ProfileController) Post() {
-	this.Data["xsrf_token"] = this.XSRFToken()
+
 	check := this.BaseController.IsLogin
 	if !check || this.Ctx.Input.Param(":id") != strconv.FormatInt(this.BaseController.UserUserId, 10) {
 		this.Redirect("/login", 302)

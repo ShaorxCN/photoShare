@@ -11,3 +11,5 @@ jquery 3.1.0
 jquery.validate.js
 
 bootstrap 3.3.6
+
+AdminLTE

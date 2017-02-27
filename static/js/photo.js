@@ -214,3 +214,8 @@ function dialogInfo(msg) {
     $('body').append(html);
     $('#dialogInfo').modal('show')  
 }
+
+
+function reset(){
+  document.getElementById("res").click();
+}
