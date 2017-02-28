@@ -5,6 +5,7 @@ import (
 	//"github.com/astaxie/beego"
 	//"html/template"
 	"github.com/astaxie/beego/orm"
+	"html/template"
 	"log"
 	"photoShare/controllers"
 	"photoShare/models"
@@ -32,6 +33,7 @@ type LoginInController struct {
 
 func (this *LoginInController) Get() {
 	this.Data["xsrf_token"] = this.XSRFToken()
+
 	this.TplName = "users/login.html"
 
 }
@@ -60,6 +62,7 @@ type UserController struct {
 
 func (this *UserController) Get() {
 	this.Data["xsrf_token"] = this.XSRFToken()
+	this.Data["xsrfdata"] = template.HTML(this.XSRFFormHTML())
 	check := this.BaseController.IsLogin
 	if (!check) || this.Ctx.Input.Param(":id") != strconv.FormatInt(this.BaseController.UserUserId, 10) {
 		this.Redirect("/login", 302)
@@ -73,6 +76,16 @@ func (this *UserController) Get() {
 			this.TplName = "error/error.tpl"
 		}
 		this.Data["user"] = user
-		this.TplName = "users/user.tpl"
+		//this.TplName = "users/user.tpl"
+		this.TplName = "strHead/top-nav.html"
 	}
+}
+
+type LoginOutController struct {
+	controllers.BaseController
+}
+
+func (this *LoginOutController) Get() {
+	this.DelSession("isLogin")
+	this.Redirect("/login", 301)
 }

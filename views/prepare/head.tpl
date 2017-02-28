@@ -20,6 +20,9 @@
     <link rel="stylesheet" type="text/css" href="/static/css/photo.css">
     <link rel="icon" href="/static/photoShare.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="/static/photoShare.ico" type="image/x-icon" />
+
+<!-- AdminLTE Skins.-->
+  <link rel="stylesheet" href="/static/css/skins/_all-skins.min.css">
     
      
 

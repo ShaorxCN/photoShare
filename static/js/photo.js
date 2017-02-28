@@ -215,7 +215,22 @@ function dialogInfo(msg) {
     $('#dialogInfo').modal('show')  
 }
 
-
+//所有form的重置js
 function reset(){
   document.getElementById("res").click();
 }
+
+//首页的搜索页面
+// function Search(event){
+   
+
+//     if(event.keyCode == 13){
+//         if(document.getElementById("navbar-search-input").value == "发现"){
+//             window.Refresh();
+
+//         }else{
+//             alert("Search");
+//         }
+//     }
+
+// }

@@ -10,6 +10,17 @@
 <!-- iCheck -->
 <script src="/static/plugins/iCheck/icheck.min.js"></script>
 
+<!-- SlimScroll -->
+<script src="/static/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+
+<script src="/static/plugins/fastclick/fastclick.js"></script>
+
+<!-- AdminLTE App -->
+<script src="/static/js/app.min.js"></script>
+
+<!-- AdminLTE for demo purposes -->
+<script src="/static/js/demo.js"></script>
+
 <!--jquery.validate.js -->
 <script src="/static/js/jquery.validate.js" type="text/javascript"></script>
 <script src="/static/js/jquery.validate.min.js" type="text/javascript"></script>
