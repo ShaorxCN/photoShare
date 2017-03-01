@@ -76,8 +76,8 @@ func (this *UserController) Get() {
 			this.TplName = "error/error.tpl"
 		}
 		this.Data["user"] = user
-		//this.TplName = "users/user.tpl"
-		this.TplName = "strHead/top-nav.html"
+		this.TplName = "users/user.tpl"
+
 	}
 }
 

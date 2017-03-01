@@ -14,3 +14,25 @@
     border-radius: 5px;
     
 }
+
+.footer-links {
+    margin: 10px 0;
+    padding-left: 0;
+}
+.footer-links li {
+    display: inline;
+    padding: 0 2px;
+}
+.footer-links li:first-child {
+    padding-left: 0;
+}
+
+.phsBody{
+    background:#ebebeb;
+    height:100%;
+}
+
+.phsbdiv{
+    height:100%;
+    background: white;
+}
