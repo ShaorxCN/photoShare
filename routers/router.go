@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/astaxie/beego"
 	"photoShare/controllers/account"
+	"photoShare/controllers/errorCtr"
 	"photoShare/controllers/user"
 )
 
@@ -23,5 +24,8 @@ func init() {
 	//账户管理模块
 	beego.Router("/register", &account.RegisterController{})
 	beego.Router("/profile/:id([0-9]+)", &account.ProfileController{})
+
+	//错误处理模块
+	beego.Router("/error", &errorCtr.ErrorController{})
 
 }

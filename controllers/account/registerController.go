@@ -58,7 +58,7 @@ func (this *ProfileController) Get() {
 	} else {
 		this.Data["response"] = map[string]interface{}{"code": 1, "profile": userProfile}
 	}
-	this.TplName = "account/profile.tpl"
+	this.TplName = "account/profile.html"
 }
 
 func (this *ProfileController) Post() {

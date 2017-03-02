@@ -1,0 +1,58 @@
+{{template "strHead/top-nav.html" .}}
+  <div class="content-wrapper row  phsBody" >
+      <div class=" phsbdiv col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">用户信息</div>
+        <div class="panel-body">
+            <form id="profile-form" role="form">
+                <input type="text" name="userId" id="userId" value="{{.response.profile.Id}}" style="display:none">
+                <div class="form-group">
+                    <label for="realname">真实姓名<font color="red">*</font></label>
+                    <input type="text" name="realname" id="realname" class="form-control" placeholder="真实姓名" autofocus value="{{.response.profile.Realname}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="sex">性别<font color="red">*</font></label><br><div>
+
+                    {{if eq .response.profile.Sex 1}}
+                    <input type="radio" name="sex" id="sex" value="1" checked="true">男</label>
+                    <input type="radio" name="sex" id="sex2" value="0" >女</label>
+                    {{else}}
+                    <input type="radio" name="sex" id="sex" value="1" >男</label>
+                    <input type="radio" name="sex" id="sex2" value="0" checked="true">女</label>
+                    {{end}}
+                </div>
+                <br>
+                <div class="form-group input-append date">
+                <label for="birth">出生日期<font color="red">*</font></label>
+                <input type="text" name="birth" id="birth" class="form-date form-control" value="{{.response.profile.Birth}}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">电子邮箱<font color="red">*</font></label>
+                    <input type="text" name="email" id="email" class="form-control" placeholder="123@xx.com" value="{{.response.profile.Email}}">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone">手机号码<font color="red">*</font></label>
+                    <input type="text" name="phone" id="phone" class="form-control" value="{{.response.profile.Phone}}">
+                </div>
+
+                <div class="form-group">
+                <label for="address">地址</label>
+                <input type="text" name="address" ip="address" class="form-control" value="{{.response.profile.Address}}">
+                </div>
+                <input id="res" name="res" type="reset" style="display:none;"> 
+                <div class="form-group ">
+               
+                 <button type="submit" class="btn  btn-default" >保存</button> &nbsp;&nbsp;<a href="JavaScript:reset()" class="text-center">恢复</a>
+                    
+               </div>
+            </form>
+        </div>
+        </div>
+        </div>
+        </div>
+</div>
+{{template "strHead/foot.html" .}}

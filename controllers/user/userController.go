@@ -73,10 +73,11 @@ func (this *UserController) Get() {
 		o := orm.NewOrm()
 		err := o.Read(user)
 		if err != nil {
-			this.TplName = "error/error.tpl"
+
+			this.Redirect("/error", 302)
 		}
 		this.Data["user"] = user
-		this.TplName = "users/user.tpl"
+		this.TplName = "users/user.html"
 
 	}
 }
