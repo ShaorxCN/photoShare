@@ -3,11 +3,13 @@ package controllers
 import (
 	"github.com/astaxie/beego"
 	//"net/http"
-	//"log"
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
+
 	"photoShare/models"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type BaseController struct {
@@ -31,15 +33,26 @@ func (b *BaseController) Prepare() {
 
 			o := orm.NewOrm()
 			user := new(models.User)
+
 			user.Id = b.UserUserId
 			err := o.Read(user)
 
 			if err != nil {
+
 				b.Data["error"] = "用户信息查询失败,请重新<a href='/login'>登录</a>"
 
 				b.Redirect("/error", 302)
 			}
+			profile := new(models.UserProfile)
+			profile.Id = user.Id
 
+			_ = o.Read(profile)
+			profile.Lasted, _ = strconv.ParseInt(time.Now().Format("20060102150405"), 10, 64)
+			logs.Info(profile.Lasted)
+			_, err = o.Update(profile)
+			if err != nil {
+				logs.Error(err.Error())
+			}
 			b.Data["user"] = user
 		}
 	}

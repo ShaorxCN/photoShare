@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"github.com/astaxie/beego/logs"
 	"github.com/astaxie/beego/orm"
 	"log"
 	"strconv"
@@ -23,21 +24,21 @@ type User struct {
 }
 
 type UserProfile struct {
-	Id         int64 `orm:"pk;column(userid);"`
-	Realname   string
-	Sex        int
-	Birth      string
-	Email      string
-	Phone      string
-	Address    string
-	Positionid int64
-	lognum     int64
-	Ip         string
-	Lasted     int64
+	Id       int64 `orm:"pk;column(userid);"`
+	Realname string
+	Sex      int
+	Birth    string
+	Email    string
+	Phone    string
+	Address  string
+	Position string
+	Lognum   int64
+	Ip       string
+	Lasted   int64
 }
 
 func init() {
-	orm.RegisterModel(new(User), new(UserProfile))
+	orm.RegisterModel(new(User), new(UserProfile), new(Message), new(Notice))
 
 }
 
@@ -50,28 +51,36 @@ func (p *UserProfile) TableName() string {
 }
 
 func LoginUser(username, password string) (User, error) {
-	orm.Debug = true
 	o := orm.NewOrm()
 	qs := o.QueryTable(TableName("user"))
 	cond := orm.NewCondition()
-	cond = cond.And("username", username).And("password", password).And("status", 1)
+	cond = cond.And("username", username).And("password", password)
 	var user User
 	err := qs.SetCond(cond).One(&user)
 
 	if err != nil {
-		log.Println(err.Error())
+		logs.Error(err.Error())
+		return user, errors.New("登录失败,请确认账户密码")
 	}
 
-	/**
-		user := User{Username: username, Password: password}
-		err := o.Read(&user)
+	if user.Status == 3 {
+		profile := new(UserProfile)
+		profile.Id = user.Id
+		_ = o.Read(profile)
 
-		if err == orm.ErrNoRows {
-			return user, err
-		} else if err == orm.ErrMissPK {
-			return user, err
+		timePoint, _ := strconv.ParseInt(time.Now().Add(time.Second*-300).Format("20060102150405"), 10, 64)
+		if timePoint >= profile.Lasted {
+			return user, nil
 		}
-	**/
+		return user, errors.New("该帐号已经登录,请核实或联系管理员")
+	}
+
+	user.Status = 3
+	_, err = o.Update(&user)
+	if err != nil {
+		err = errors.New("登录状态异常")
+	}
+
 	return user, err
 
 }
@@ -148,6 +157,7 @@ func RegisterUser(username, password string) (*User, error) {
 
 		profile := new(UserProfile)
 		profile.Id = id
+		profile.Position = "1"
 		user.Profile = profile
 		err = o.Begin()
 		if err != nil {
@@ -176,4 +186,45 @@ func RegisterUser(username, password string) (*User, error) {
 		return user, errors.New("注册失败")
 	}
 	return user, nil
+}
+
+func GetNickById(userId int64) string {
+	o := orm.NewOrm()
+	user := new(User)
+
+	user.Id = userId
+
+	err := o.Read(user)
+
+	if err != nil {
+		return "nil"
+	}
+
+	return user.Username
+}
+
+func ChangeLoginStatus(user User) error {
+	o := orm.NewOrm()
+
+	user.Status = 3
+
+	_, err := o.Update(&user)
+
+	return err
+}
+
+func SignOut(userId int64) error {
+	o := orm.NewOrm()
+	user := new(User)
+	user.Id = userId
+	err := o.Read(user)
+	if err != nil {
+		return err
+	}
+
+	user.Status = 1
+	_, err = o.Update(user)
+
+	return err
+
 }

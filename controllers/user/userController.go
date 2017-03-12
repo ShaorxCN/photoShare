@@ -4,7 +4,7 @@ import (
 	"fmt"
 	//"github.com/astaxie/beego"
 	//"html/template"
-	"github.com/astaxie/beego/orm"
+	//"github.com/astaxie/beego/orm"
 	"html/template"
 	"log"
 	"photoShare/controllers"
@@ -47,9 +47,8 @@ func (this *LoginInController) Post() {
 
 	if err != nil {
 		log.Println(err.Error())
-		this.Data["json"] = map[string]interface{}{"code": 0, "message": "登录失败，请您确认账户或者密码"}
+		this.Data["json"] = map[string]interface{}{"code": 0, "message": err.Error()}
 	} else {
-
 		this.SetSession("isLogin", strconv.FormatInt(user.Id, 10)+"||"+username)
 		this.Data["json"] = map[string]interface{}{"code": 1, "message": "恭喜登录您登录成功," + user.Username, "redirect": fmt.Sprintf("user/%d", user.Id)}
 	}
@@ -68,15 +67,7 @@ func (this *UserController) Get() {
 		this.Redirect("/login", 302)
 
 	} else {
-		user := new(models.User)
-		user.Id = this.BaseController.UserUserId
-		o := orm.NewOrm()
-		err := o.Read(user)
-		if err != nil {
 
-			this.Redirect("/error", 302)
-		}
-		this.Data["user"] = user
 		this.TplName = "users/user.html"
 
 	}
@@ -87,6 +78,11 @@ type LoginOutController struct {
 }
 
 func (this *LoginOutController) Get() {
+	err := models.SignOut(this.BaseController.UserUserId)
+	log.Println(err)
+	if err != nil {
+		this.Redirect("/error", 302)
+	}
 	this.DelSession("isLogin")
 	this.Redirect("/login", 301)
 }

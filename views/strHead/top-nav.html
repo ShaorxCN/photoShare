@@ -48,34 +48,45 @@
             <li class="dropdown messages-menu">
               <!-- Menu toggle button -->
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+               {{$mc := getMessageById $.user.Id}}
                 <i class="fa fa-envelope-o"></i>
-                <span class="label label-success">4</span>
+                <span class="label label-success">{{if gt $mc 0}}{{$mc}}{{end}}</span>
               </a>
               <ul class="dropdown-menu">
-                <li class="header">You have 4 messages</li>
+             
+                <li class="header">You have {{$mc}} messages</li>
                 <li>
                   <!-- inner menu: contains the messages -->
-                  <ul class="menu">
-                    <li><!-- start message -->
-                      <a href="#">
+                  
+                    <ul class="menu">
+                    {{$Msgl := getMessageList $.user.Id}}
+                    {{if eq $Msgl.Flag 1}}
+                    {{range $mk,$m := $Msgl.Msgs}}
+
+                     <li>
+                      <a href="/message/{{$m.Messageid}}">
                         <div class="pull-left">
                           <!-- User Image -->
                           <img src="/static/img/photoShare.jpg" class="img-circle" alt="User Image">
                         </div>
                         <!-- Message title and timestamp -->
                         <h4>
-                          Support Team
-                          <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                          {{getNickById $m.Senderid}}
                         </h4>
                         <!-- The message -->
-                        <p>Why not buy a new awesome theme?</p>
+                        <p>{{$m.Content}}</p>
                       </a>
                     </li>
                     <!-- end message -->
-                  </ul>
+                  
+                  {{end}}
+                  {{else}}
+                    <p>获取消息列表失败,请联系管理员</p>
+                  {{end}}
                   <!-- /.menu -->
+                  </ul>
                 </li>
-                <li class="footer"><a href="#">See All Messages</a></li>
+                <li class="footer"><a href="/message/{{.user.Id}}">See All Messages</a></li>
               </ul>
             </li>
             <!-- /.messages-menu -->
